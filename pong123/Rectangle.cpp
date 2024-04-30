@@ -95,7 +95,7 @@ Player::Player(Punti* scr, Color c, std::string name) : Rectangle::Rectangle(scr
 	this->name = name;
 }
 
-void Player::action(){
+void Player::movement(){
 	ALLEGRO_KEYBOARD_STATE key;
 	al_get_keyboard_state(&key);
 	if (al_key_down(&key,keyUp) && y2 > scr[0].y) {
@@ -108,7 +108,7 @@ void Player::action(){
 	}
 }
 Player::~Player(){
-	scr = nullptr;
+	Rectangle::~Rectangle();
 }
 
 std::string Player::getName(){
@@ -120,23 +120,33 @@ void Player::resetAll(){
 	score = 0;
 }
 
-void SpecialPlayer::action(){
-	ALLEGRO_KEYBOARD_STATE key;
-	al_get_keyboard_state(&key);
 
-	//Azioni legate al movimento
-	if (al_key_down(&key, keyUp) && y2 > scr[0].y) {
-		y1 -= MOVEMENTRECT;
-		y2 -= MOVEMENTRECT;
+
+SpecialPlayer::SpecialPlayer(Punti* scr, Color c, std::string name) : Player(scr,c,name){
+	healt = 3;//Vite disponibili
+	power = PNULL;//Nullo perché non si ha nessun power up
+	switch (actualIstance) {
+	case 1:
+		keyPower = ALLEGRO_KEY_SPACE;
+		break;
+	case 2:
+		keyPower = ALLEGRO_KEY_ENTER;
+		break;
 	}
-	if (al_key_down(&key, keyDown) && y1 < scr[1].y) {
-		y1 += MOVEMENTRECT;
-		y2 += MOVEMENTRECT;
-	}
+}
 
+SpecialPlayer::~SpecialPlayer(){
+	Player::~Player();
+}
 
-	//Azioni slegate dal movimento
-	if(al_key_down(&key,ALLEGRO_KEY_SPACE) && )
+int SpecialPlayer::getPkey(){
+	return keyPower;
+}
 
+powerUp SpecialPlayer::getPowerup(){
+	return powerUp();
+}
+
+void SpecialPlayer::freeze(){
 
 }

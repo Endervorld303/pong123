@@ -46,6 +46,7 @@ enum Color {
 
 //Enum che crea i tipi powerup/Azioni nellaa modalita speciale
 enum powerUp {
+	PNULL = NULL,//Potere Nullo(Messo perché senno non lo accettava)
 	FREEZE,//Freeza il player avversario
 	SPEEDUPBALL,//Aumenta la velocita della pallina
 	DECREASE,//Diminuisce le dimensioni del'avversario per tot tempo
@@ -65,5 +66,6 @@ struct Punti {
 
 //Funzione che prende in input l'enum Color e lo traduce nel corrispettivo ALLEGRO_COLOR
 ALLEGRO_COLOR colortype(Color color);
+
 //Funzione per mandare il gameover, usa la scena attuale e restituisce il corrispettivo gameover
 void gameisover(Scene *acScene);

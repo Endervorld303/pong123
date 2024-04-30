@@ -25,9 +25,9 @@ public:
 	float gety2();
 	int getScore();
 
-	void gotaPoint();//Per far ottenerte pla player un punto
+	virtual void gotaPoint();//Per far ottenerte pla player un punto
 	void render();//Renderizza il rettangolo
-	virtual void action() = 0;//Metodo astratta per il movimento
+	virtual void movement() = 0;//Metodo astratta per il movimento
 	void reset();//Reset del rettangolo
 };
 
@@ -42,7 +42,7 @@ protected:
 public:
 	Player(Punti *scr, Color c, std::string name);//Costruttore
 	~Player();//Distruttore
-	virtual void action() override;//Over ride del metodo astratta
+	virtual void movement() override;//Over ride del metodo astratta
 	std::string getName();//Getter del nome
 	void resetAll();//Resetta tutto
 };
@@ -53,12 +53,22 @@ public:
 class SpecialPlayer : public Player {
 private:
 	int healt;//Vita
+	powerUp power;//Potere usabile 
+	int keyPower;
 public:
-	void action() override;
+	SpecialPlayer(Punti* scr, Color c, std::string name);
+	~SpecialPlayer();
+	int getPkey();
+	powerUp getPowerup();
+	void freeze();//Freezza il personaggio per 3 secondi
+	/*void loseHealth();//Perdi vita
+	void decrease();//Diminuisce la dimensione per 10 secondi
+	void increase();//Aumenta la dimmensione per 10 secondi
+	void gotaPoint() override;//Ottieni un punto, override perché riscrive il gotapoint di Player
+	*/
 };
 
 
 
 //Classe Npc (WIP)
 class Npc : public Rectangle {};
-

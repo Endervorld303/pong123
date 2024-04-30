@@ -4,6 +4,11 @@
 #include "Rectangle.h"
 #include "Triangle.h"
 
+//Funzioni definibili solo nel main per problemi da sistemare
+void action(SpecialPlayer* p1, SpecialPlayer* p2, Pallina* pallina);
+
+
+
 int main() {
 	//Inizializzazione di tutte le addon di allegro che servono per il programma
 	al_init();
@@ -67,7 +72,7 @@ int main() {
 				al_draw_textf(font, colortype(YELLOW), 600, 100, ALLEGRO_ALIGN_CENTER, "Punti di %s: %d", player1->getName().c_str(), player1->getScore());
 				
 				//Movimenti
-				player1->action();
+				player1->movement();
 				ball->movement(player1, &scene);
 				
 				//Render
@@ -87,8 +92,8 @@ int main() {
 				al_draw_textf(font, colortype(YELLOW), 900, 100, ALLEGRO_ALIGN_CENTER, "Punti di %s: %d", player2->getName().c_str(), player2->getScore());
 				
 				//Movimenti
-				player1->action();
-				player2->action();
+				player1->movement();
+				player2->movement();
 				ball->movement(player1, player2);
 				
 				//Render
@@ -270,4 +275,14 @@ void gameisover(Scene *acScene){
 		*acScene = GAMEOVERM;
 	else
 		std::cerr << "Niente gameover ";
+}
+
+void action(SpecialPlayer* p1, SpecialPlayer* p2, Pallina* pallina, ALLEGRO_KEYBOARD_STATE *key){
+	if (al_key_down(key, p1->getPkey())) {
+		switch (p1->getPowerup()) {
+		case FREEZE:
+			p2->freeze();
+			break;
+		}
+	}
 }
