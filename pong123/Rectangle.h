@@ -27,14 +27,14 @@ public:
 
 	void gotaPoint();//Per far ottenerte pla player un punto
 	void render();//Renderizza il rettangolo
-	virtual void movement() = 0;//Metodo astratta per il movimento
+	virtual void action() = 0;//Metodo astratta per il movimento
 	void reset();//Reset del rettangolo
 };
 
 
 //Classe figlia di rectangle
 class Player : public Rectangle {
-private:
+protected:
 	std::string name;
 
 	int keyUp;//Tasto con cui il player va su
@@ -42,7 +42,7 @@ private:
 public:
 	Player(Punti *scr, Color c, std::string name);//Costruttore
 	~Player();//Distruttore
-	void movement() override;//Over ride del metodo astratta
+	virtual void action() override;//Over ride del metodo astratta
 	std::string getName();//Getter del nome
 	void resetAll();//Resetta tutto
 };
@@ -54,6 +54,7 @@ class SpecialPlayer : public Player {
 private:
 	int healt;//Vita
 public:
+	void action() override;
 };
 
 

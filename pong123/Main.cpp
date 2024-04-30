@@ -13,7 +13,7 @@ int main() {
 	al_install_keyboard();
 	srand(time(NULL));//Per il rand delle condizioni della pallina
 
-	Punti *scr = new Punti[2];//Bordi dello schermoAAAA
+	Punti *scr = new Punti[2];//Bordi dello schermo
 	scr[0].x = 0;
 	scr[1].x = 1200;
 	scr[0].y = 0;
@@ -67,7 +67,7 @@ int main() {
 				al_draw_textf(font, colortype(YELLOW), 600, 100, ALLEGRO_ALIGN_CENTER, "Punti di %s: %d", player1->getName().c_str(), player1->getScore());
 				
 				//Movimenti
-				player1->movement();
+				player1->action();
 				ball->movement(player1, &scene);
 				
 				//Render
@@ -87,8 +87,8 @@ int main() {
 				al_draw_textf(font, colortype(YELLOW), 900, 100, ALLEGRO_ALIGN_CENTER, "Punti di %s: %d", player2->getName().c_str(), player2->getScore());
 				
 				//Movimenti
-				player1->movement();
-				player2->movement();
+				player1->action();
+				player2->action();
 				ball->movement(player1, player2);
 				
 				//Render
@@ -186,7 +186,7 @@ int main() {
 				//Qui si istanziano tutti gli oggetti riguardanti il multiplayer e poi si cambia la scena nel gioco multiplayer
 				player1 = new Player(scr, WHITE, "Giocatore 1");
 				player2 = new Player(scr, WHITE, "Giocatore 2");
-				ball = new Pallina(scr,WHITE);
+				ball = new Pallina(scr, WHITE);
 				scene = MULTIPLAYER;
 				break;
 

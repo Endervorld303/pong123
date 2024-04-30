@@ -95,7 +95,7 @@ Player::Player(Punti* scr, Color c, std::string name) : Rectangle::Rectangle(scr
 	this->name = name;
 }
 
-void Player::movement(){
+void Player::action(){
 	ALLEGRO_KEYBOARD_STATE key;
 	al_get_keyboard_state(&key);
 	if (al_key_down(&key,keyUp) && y2 > scr[0].y) {
@@ -120,4 +120,23 @@ void Player::resetAll(){
 	score = 0;
 }
 
+void SpecialPlayer::action(){
+	ALLEGRO_KEYBOARD_STATE key;
+	al_get_keyboard_state(&key);
 
+	//Azioni legate al movimento
+	if (al_key_down(&key, keyUp) && y2 > scr[0].y) {
+		y1 -= MOVEMENTRECT;
+		y2 -= MOVEMENTRECT;
+	}
+	if (al_key_down(&key, keyDown) && y1 < scr[1].y) {
+		y1 += MOVEMENTRECT;
+		y2 += MOVEMENTRECT;
+	}
+
+
+	//Azioni slegate dal movimento
+	if(al_key_down(&key,ALLEGRO_KEY_SPACE) && )
+
+
+}
