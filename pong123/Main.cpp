@@ -13,7 +13,7 @@ int main() {
 	al_install_keyboard();
 	srand(time(NULL));//Per il rand delle condizioni della pallina
 
-	Punti *scr = new Punti[2];//Bordi dello schermo
+	Punti *scr = new Punti[2];//Bordi dello schermoAAAA
 	scr[0].x = 0;
 	scr[1].x = 1200;
 	scr[0].y = 0;
