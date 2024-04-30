@@ -60,8 +60,9 @@ public:
 	~SpecialPlayer();
 	int getPkey();
 	powerUp getPowerup();
+	void loseHealth();//Perdi vita
 	void freeze();//Freezza il personaggio per 3 secondi
-	/*void loseHealth();//Perdi vita
+	/*
 	void decrease();//Diminuisce la dimensione per 10 secondi
 	void increase();//Aumenta la dimmensione per 10 secondi
 	void gotaPoint() override;//Ottieni un punto, override perché riscrive il gotapoint di Player

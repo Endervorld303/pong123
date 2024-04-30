@@ -147,6 +147,10 @@ powerUp SpecialPlayer::getPowerup(){
 	return powerUp();
 }
 
+void SpecialPlayer::loseHealth(){
+	healt--;
+}
+
 void SpecialPlayer::freeze(){
 
 }
