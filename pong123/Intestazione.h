@@ -51,8 +51,6 @@ enum powerUp {
 	PNULL = NULL,//Potere Nullo(Messo perché senno non lo accettava)
 	FREEZE,//Freeza il player avversario
 	SPEEDUPBALL,//Aumenta la velocita della pallina
-	DECREASE,//Diminuisce le dimensioni del'avversario per tot tempo
-	INCREASE,//Aumenta le propie dimensioni per tot tempo
 	MULTIBALL,//Crea più palline per fare più punti
 	SUPERPOINT,//Il prossimo punto che si fa varrà 2 punti
 };

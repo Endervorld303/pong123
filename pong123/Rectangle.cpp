@@ -126,6 +126,7 @@ SpecialPlayer::SpecialPlayer(Punti* scr, Color c, std::string name) : Player(scr
 	healt = 3;//Vite disponibili
 	power = PNULL;//Nullo perché non si ha nessun power up
 	condMov = true;
+	doublePoint = false;
 	movConter = NULL;
 
 	switch (actualIstance) {
@@ -168,4 +169,17 @@ void SpecialPlayer::loseHealth(){
 void SpecialPlayer::freeze(){
 	condMov = false;
 	movConter = 0;
+}
+
+void SpecialPlayer::doublePointValue(){
+	doublePoint = true;
+}
+
+void SpecialPlayer::gotaPoint(){
+	if (doublePoint)
+		score += 2;
+	else {
+		doublePoint = false;
+		score++;
+	}
 }

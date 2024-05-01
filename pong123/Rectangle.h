@@ -57,6 +57,7 @@ private:
 	int keyPower;
 	bool condMov;
 	int movConter;
+	bool doublePoint;
 public:
 	SpecialPlayer(Punti* scr, Color c, std::string name);
 	~SpecialPlayer();
@@ -65,11 +66,9 @@ public:
 	void movement() override;//Override di movement
 	void loseHealth();//Perdi vita
 	void freeze();//Freezza il personaggio per 3 secondi
-	/*
-	void decrease();//Diminuisce la dimensione per 10 secondi
-	void increase();//Aumenta la dimmensione per 10 secondi
+	void doublePointValue();//I punti valgono il doppio
 	void gotaPoint() override;//Ottieni un punto, override perché riscrive il gotapoint di Player
-	*/
+	
 };
 
 
