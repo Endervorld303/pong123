@@ -55,11 +55,14 @@ private:
 	int healt;//Vita
 	powerUp power;//Potere usabile 
 	int keyPower;
+	bool condMov;
+	int movConter;
 public:
 	SpecialPlayer(Punti* scr, Color c, std::string name);
 	~SpecialPlayer();
 	int getPkey();
 	powerUp getPowerup();
+	void movement() override;//Override di movement
 	void loseHealth();//Perdi vita
 	void freeze();//Freezza il personaggio per 3 secondi
 	/*

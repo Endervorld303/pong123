@@ -18,6 +18,8 @@
 #define RECTWIDTH 15
 #define LATO 40
 #define WINSCORE 5
+#define FPS 60.0
+#define FREEZETIME (FPS*5)
 
 //Enum che serve per capire in che scena del gioco ci troviamo attualmente
 enum Scene {

@@ -27,7 +27,7 @@ int main() {
 	//Creazione delle cose necessarie per il gioco come il display, il font, il timer e la codo di eventi
 	ALLEGRO_DISPLAY* display = al_create_display(1200,900);
 	ALLEGRO_FONT *font = al_load_ttf_font("YARDSALE.TTF", 30, 0);
-	ALLEGRO_TIMER *timer = al_create_timer(1.0/120.0);
+	ALLEGRO_TIMER *timer = al_create_timer(1.0/FPS);
 	ALLEGRO_EVENT_QUEUE *queue = al_create_event_queue();
 	ALLEGRO_KEYBOARD_STATE key;
 

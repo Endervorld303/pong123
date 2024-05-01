@@ -125,6 +125,9 @@ void Player::resetAll(){
 SpecialPlayer::SpecialPlayer(Punti* scr, Color c, std::string name) : Player(scr,c,name){
 	healt = 3;//Vite disponibili
 	power = PNULL;//Nullo perché non si ha nessun power up
+	condMov = true;
+	movConter = NULL;
+
 	switch (actualIstance) {
 	case 1:
 		keyPower = ALLEGRO_KEY_SPACE;
@@ -147,10 +150,22 @@ powerUp SpecialPlayer::getPowerup(){
 	return powerUp();
 }
 
+void SpecialPlayer::movement(){
+	if (condMov)
+		Player::movement();
+	else {
+		if (movConter > FREEZETIME)
+			condMov = true;
+		else
+			movConter++;
+	}
+}
+
 void SpecialPlayer::loseHealth(){
 	healt--;
 }
 
 void SpecialPlayer::freeze(){
-
+	condMov = false;
+	movConter = 0;
 }
