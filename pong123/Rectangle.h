@@ -66,7 +66,7 @@ public:
 	void movement() override;//Override di movement
 	void loseHealth();//Perdi vita
 	void freeze();//Freezza il personaggio per 3 secondi
-	void doublePointValue();//I punti valgono il doppio
+	void superPoint();//I punti valgono il doppio
 	void gotaPoint() override;//Ottieni un punto, override perché riscrive il gotapoint di Player
 	
 };

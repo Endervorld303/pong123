@@ -6,7 +6,7 @@
 
 //Funzioni definibili solo nel main per problemi da sistemare
 void action(SpecialPlayer* p1, SpecialPlayer* p2, Pallina* pallina);
-
+using std::vector;
 
 
 int main() {
@@ -65,7 +65,30 @@ int main() {
 			
 			//Switch per vedere in che scena siamo
 			switch (scene) {
-				
+			case MENU:
+				//Siamo nel menu quindi crea le 4 scritte con le 4 modalita 
+				//e poi in base al tasto premuto il triangolo si sposta su un opzione di gioco
+				al_draw_text(font, colortype(BLUE), 600, 100, ALLEGRO_ALIGN_CENTER, "Selezione Modalita':");
+				al_draw_text(font, colortype(BLUE), 300, 300, ALLEGRO_ALIGN_CENTER, "1)SinglePLayer");
+				al_draw_text(font, colortype(BLUE), 900, 300, ALLEGRO_ALIGN_CENTER, "2)Multiplayer");
+				al_draw_text(font, colortype(BLUE), 300, 450, ALLEGRO_ALIGN_CENTER, "3)Singleplayer (WIP)");
+				al_draw_text(font, colortype(BLUE), 900, 450, ALLEGRO_ALIGN_CENTER, "4)Multiplayer (WIP)");
+				//Render e move del triangolo del menu
+				t->move();
+				t->render();
+				t->changeScene(&scene);
+				break;
+
+
+
+			case INITSINGLE:
+				//Qui si istanziano tutti gli oggetti riguardanti il singleplayer e poi si cambia la scena nel gioco singleplayer
+				player1 = new Player(scr, WHITE, "Giocatore 1");
+				ball = new Pallina(scr, WHITE);
+				scene = SINGLEPLAYER;
+				break;
+
+
 			case SINGLEPLAYER:
 				//Siamo nella scena singleplayer e quindi crea la scena del singleplayer, con la scritta col punteggio
 				//E poi fa muovere il player e la pallina e poi li renderizza
@@ -84,6 +107,43 @@ int main() {
 					gameisover(&scene);
 				break;
 
+
+			case GAMEOVERS:
+				//Siamo nel gameover del Singleplayer
+				al_draw_text(font, colortype(RED), 600, 300, ALLEGRO_ALIGN_CENTER, "HAI PERSO");
+				al_draw_text(font, colortype(RED), 300, 450, ALLEGRO_ALIGN_CENTER, "Premi R per ricominciare");
+				al_draw_text(font, colortype(RED), 900, 450, ALLEGRO_ALIGN_CENTER, "Premi M per il Menu");
+				//Se viene premuto il tasto R il gioco si resetta e si torna al singleplayer
+				if (al_key_down(&key, ALLEGRO_KEY_R)) {
+					player1->resetAll();
+					ball->reset();
+					scene = SINGLEPLAYER;
+				}
+				//Se viene premuto il tasto M allora si tornera al Menu, non prima di aver distrutto gli oggetti del singleplayer 
+				else if (al_key_down(&key, ALLEGRO_KEY_M))
+					scene = DELSINGLE;
+				break;
+
+
+			case DELSINGLE:
+				//Siamo nella distruzzione della scena del singleplayer 
+				// e qui vengono distrutti tutti gli oggetti riguardanti il singleplayer e si cambia la scena nel menu
+				delete ball;
+				delete player1;
+				player1 = nullptr;
+				ball = nullptr;
+				scene = MENU;
+				break;
+
+
+
+			case INITMULTI:
+				//Qui si istanziano tutti gli oggetti riguardanti il multiplayer e poi si cambia la scena nel gioco multiplayer
+				player1 = new Player(scr, WHITE, "Giocatore 1");
+				player2 = new Player(scr, WHITE, "Giocatore 2");
+				ball = new Pallina(scr, WHITE);
+				scene = MULTIPLAYER;
+				break;
 
 			case MULTIPLAYER:
 				//Siamo nella scena multiplayer quindi crea le scritte dei 2 player con i loro punteggi
@@ -109,37 +169,6 @@ int main() {
 				}
 				break;
 
-			case MENU:
-				//Siamo nel menu quindi crea le 4 scritte con le 4 modalita 
-				//e poi in base al tasto premuto il triangolo si sposta su un opzione di gioco
-				al_draw_text(font, colortype(BLUE), 600, 100, ALLEGRO_ALIGN_CENTER, "Selezione Modalita':");
-				al_draw_text(font, colortype(BLUE), 300, 300, ALLEGRO_ALIGN_CENTER, "1)SinglePLayer");
-				al_draw_text(font, colortype(BLUE), 900, 300, ALLEGRO_ALIGN_CENTER, "2)Multiplayer");
-				al_draw_text(font, colortype(BLUE), 300, 450, ALLEGRO_ALIGN_CENTER, "3)Singleplayer (WIP)");
-				al_draw_text(font, colortype(BLUE), 900, 450, ALLEGRO_ALIGN_CENTER, "4)Multiplayer (WIP)");
-				//Render e move del triangolo del menu
-				t->move();
-				t->render();
-				t->changeScene(&scene);
-				break;
-
-			case GAMEOVERS:
-				//Siamo nel gameover del Singleplayer
-				al_draw_text(font, colortype(RED), 600, 300, ALLEGRO_ALIGN_CENTER, "HAI PERSO");
-				al_draw_text(font, colortype(RED), 300, 450, ALLEGRO_ALIGN_CENTER, "Premi R per ricominciare");
-				al_draw_text(font, colortype(RED), 900, 450, ALLEGRO_ALIGN_CENTER, "Premi M per il Menu");
-				//Se viene premuto il tasto R il gioco si resetta e si torna al singleplayer
-				if (al_key_down(&key, ALLEGRO_KEY_R)) {
-					player1->resetAll();
-					ball->reset();
-					scene = SINGLEPLAYER;
-				}
-				//Se viene premuto il tasto M allora si tornera al Menu, non prima di aver distrutto gli oggetti del singleplayer 
-				else if (al_key_down(&key, ALLEGRO_KEY_M))
-					scene = DELSINGLE;
-				
-				break;
-
 			case GAMEOVERM:
 				//Siamo nel gameover del multiplayer 
 				if (win)//Se vince il primo player o il secondo player 
@@ -161,19 +190,6 @@ int main() {
 					scene = DELMULTY;
 				break;
 
-
-
-			case DELSINGLE:
-				//Siamo nella distruzzione della scena del singleplayer 
-				// e qui vengono distrutti tutti gli oggetti riguardanti il singleplayer e si cambia la scena nel menu
-				delete ball;
-				delete player1;
-				player1 = nullptr;
-				ball = nullptr;
-				scene = MENU;
-				break;
-
-
 			case DELMULTY:
 				//Siamo nella distruzzione della scena del Multiplayer
 				// e qui vengono distrutti tutti gli oggetti riguardanti il Multiplayer e si cambia la scena nel menu
@@ -187,21 +203,6 @@ int main() {
 				break;
 
 
-			case INITMULTI:
-				//Qui si istanziano tutti gli oggetti riguardanti il multiplayer e poi si cambia la scena nel gioco multiplayer
-				player1 = new Player(scr, WHITE, "Giocatore 1");
-				player2 = new Player(scr, WHITE, "Giocatore 2");
-				ball = new Pallina(scr, WHITE);
-				scene = MULTIPLAYER;
-				break;
-
-
-			case INITSINGLE:
-				//Qui si istanziano tutti gli oggetti riguardanti il singleplayer e poi si cambia la scena nel gioco singleplayer
-				player1 = new Player(scr, WHITE, "Giocatore 1");
-				ball = new Pallina(scr, WHITE);
-				scene = SINGLEPLAYER;
-				break;
 			}
 		}
 		else if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) 
@@ -282,6 +283,12 @@ void action(SpecialPlayer* p1, SpecialPlayer* p2, Pallina* pallina, ALLEGRO_KEYB
 		switch (p1->getPowerup()) {
 		case FREEZE:
 			p2->freeze();
+			break;
+		case SPEEDUPBALL:
+			pallina->speedUp(2.5);
+			break;
+		case SUPERPOINT:
+			p1->superPoint();
 			break;
 		}
 	}

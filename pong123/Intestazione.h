@@ -24,14 +24,16 @@
 //Enum che serve per capire in che scena del gioco ci troviamo attualmente
 enum Scene {
 	MENU,
-	SINGLEPLAYER,
-	MULTIPLAYER,
-	GAMEOVERS,
-	GAMEOVERM,
-	DELSINGLE,
-	DELMULTY,
+
 	INITSINGLE,
-	INITMULTI,
+	SINGLEPLAYER,
+	GAMEOVERS,
+	DELSINGLE,
+
+	INITMULTI, 
+	MULTIPLAYER,
+	GAMEOVERM,
+	DELMULTY,	
 };
 
 //Enum per semplificare la gestione dei colori
@@ -51,7 +53,6 @@ enum powerUp {
 	PNULL = NULL,//Potere Nullo(Messo perché senno non lo accettava)
 	FREEZE,//Freeza il player avversario
 	SPEEDUPBALL,//Aumenta la velocita della pallina
-	MULTIBALL,//Crea più palline per fare più punti
 	SUPERPOINT,//Il prossimo punto che si fa varrà 2 punti
 };
 

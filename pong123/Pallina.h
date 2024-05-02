@@ -23,6 +23,7 @@ public:
 	void movement(Rectangle *p1, Rectangle *p2); //Movimento in caso di multiplayer
 	void render(); //Metodo per renderizzare la pallina
 	void reset(); //Metodo per resettare la pallina nella sua posizione originale
+	void speedUp(float acc);
 	//Getter
 	float getX();
 	float getY();

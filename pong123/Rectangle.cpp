@@ -171,7 +171,7 @@ void SpecialPlayer::freeze(){
 	movConter = 0;
 }
 
-void SpecialPlayer::doublePointValue(){
+void SpecialPlayer::superPoint(){
 	doublePoint = true;
 }
 

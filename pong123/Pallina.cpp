@@ -128,6 +128,11 @@ void Pallina::movement(Rectangle *p1, Rectangle *p2){
 		else
 			condy = true;
 	}
+
+	//Per vedere se l'accelerazione è maggiore di 0.5
+	if (acc > 0.5) {
+		acc -= 0.1;
+	}
 }
 
 void Pallina::render()
@@ -141,6 +146,10 @@ void Pallina::reset(){
 	y = scr[1].y / 2;
 	condx = rand() % 2;
 	condy = rand() % 2;
+}
+
+void Pallina::speedUp(float acceleration){
+	acc = acceleration;
 }
 
 float Pallina::getX(){
