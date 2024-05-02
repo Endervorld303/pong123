@@ -48,6 +48,10 @@ float Rectangle::gety2() { return y2; }
 
 int Rectangle::getScore() { return score; }
 
+ALLEGRO_COLOR Rectangle::getColor() {
+	return color;
+}
+
 void Rectangle::gotaPoint() {
 	score++; 
 }
@@ -81,6 +85,8 @@ void Rectangle::reset(){
 
 
 Player::Player(Punti* scr, Color c, std::string name) : Rectangle::Rectangle(scr, c){
+	if (name == "Ash Lynx")
+		color = al_map_rgb(255,215,0);
 	switch (playerNum){
 	case 1:
 		keyUp = ALLEGRO_KEY_W;
@@ -107,6 +113,8 @@ void Player::movement(){
 		y2 += MOVEMENTRECT;
 	}
 }
+
+
 Player::~Player(){
 	Rectangle::~Rectangle();
 }
@@ -124,10 +132,10 @@ void Player::resetAll(){
 
 SpecialPlayer::SpecialPlayer(Punti* scr, Color c, std::string name) : Player(scr,c,name){
 	healt = 3;//Vite disponibili
-	power = PNULL;//Nullo perché non si ha nessun power up
+	power = FREEZE;//Nullo perché non si ha nessun power up
 	condMov = true;
 	doublePoint = false;
-	movConter = NULL;
+	movConter = 0;
 
 	switch (actualIstance) {
 	case 1:
@@ -148,15 +156,42 @@ int SpecialPlayer::getPkey(){
 }
 
 powerUp SpecialPlayer::getPowerup(){
-	return powerUp();
+	return power;
+}
+
+std::string SpecialPlayer::getPowerupStr()
+{
+	std::string powerStr;
+	switch (power) {
+	case PNULL:
+		powerStr = "Nessuno";
+		break;
+	case FREEZE:
+		powerStr = "Freeze";
+		break;
+	case SPEEDUPBALL:
+		powerStr = "SpeedUp";
+		break;
+	case SUPERPOINT:
+		powerStr = "SuperPoint";
+		break;
+	}
+	return powerStr;
+}
+
+void SpecialPlayer::powerUsed(){
+	power = PNULL;
 }
 
 void SpecialPlayer::movement(){
 	if (condMov)
 		Player::movement();
 	else {
-		if (movConter > FREEZETIME)
+		if (movConter > FREEZETIME) {
 			condMov = true;
+			movConter = 0;
+		}
+			
 		else
 			movConter++;
 	}

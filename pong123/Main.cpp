@@ -4,9 +4,10 @@
 #include "Rectangle.h"
 #include "Triangle.h"
 
-//Funzioni definibili solo nel main per problemi da sistemare
-void action(SpecialPlayer* p1, SpecialPlayer* p2, Pallina* pallina);
 using std::vector;
+
+//Funzioni definibili solo nel main perché non definibili in Intestazione.h perché richiedono classi in Rectangle e Pallina
+void action(SpecialPlayer* p1, SpecialPlayer* p2, Pallina* pallina, ALLEGRO_KEYBOARD_STATE* key);
 
 
 int main() {
@@ -41,7 +42,7 @@ int main() {
 	t->addpoint(150,315,INITSINGLE);//Singleplayer base
 	t->addpoint(750,315, INITMULTI);//Multiplayerbase
 	t->addpoint(100,465, INITSINGLE);//Singpeayer wip
-	t->addpoint(700,465, INITMULTI);//Multiplayer wip
+	t->addpoint(680,465, INITMULTIS);//Multiplayer Speciale
 
 	//Altre variabili per la logica del gioco
 	bool running = true;
@@ -72,7 +73,7 @@ int main() {
 				al_draw_text(font, colortype(BLUE), 300, 300, ALLEGRO_ALIGN_CENTER, "1)SinglePLayer");
 				al_draw_text(font, colortype(BLUE), 900, 300, ALLEGRO_ALIGN_CENTER, "2)Multiplayer");
 				al_draw_text(font, colortype(BLUE), 300, 450, ALLEGRO_ALIGN_CENTER, "3)Singleplayer (WIP)");
-				al_draw_text(font, colortype(BLUE), 900, 450, ALLEGRO_ALIGN_CENTER, "4)Multiplayer (WIP)");
+				al_draw_text(font, colortype(BLUE), 900, 450, ALLEGRO_ALIGN_CENTER, "4)Special Multiplayer ");
 				//Render e move del triangolo del menu
 				t->move();
 				t->render();
@@ -83,7 +84,7 @@ int main() {
 
 			case INITSINGLE:
 				//Qui si istanziano tutti gli oggetti riguardanti il singleplayer e poi si cambia la scena nel gioco singleplayer
-				player1 = new Player(scr, WHITE, "Giocatore 1");
+				player1 = new Player(scr, INDIGO, "Ash Lynx");
 				ball = new Pallina(scr, WHITE);
 				scene = SINGLEPLAYER;
 				break;
@@ -92,7 +93,7 @@ int main() {
 			case SINGLEPLAYER:
 				//Siamo nella scena singleplayer e quindi crea la scena del singleplayer, con la scritta col punteggio
 				//E poi fa muovere il player e la pallina e poi li renderizza
-				al_draw_textf(font, colortype(YELLOW), 600, 100, ALLEGRO_ALIGN_CENTER, "Punti di %s: %d", player1->getName().c_str(), player1->getScore());
+				al_draw_textf(font, player1->getColor(), 600, 100, ALLEGRO_ALIGN_CENTER, "Punti di %s: %d", player1->getName().c_str(), player1->getScore());
 				
 				//Movimenti
 				player1->movement();
@@ -148,8 +149,8 @@ int main() {
 			case MULTIPLAYER:
 				//Siamo nella scena multiplayer quindi crea le scritte dei 2 player con i loro punteggi
 				//E fa muovere i player e la pallina e poi li renderizza
-				al_draw_textf(font, colortype(YELLOW), 300, 100, ALLEGRO_ALIGN_CENTER, "Punti di %s: %d", player1->getName().c_str(), player1->getScore());
-				al_draw_textf(font, colortype(YELLOW), 900, 100, ALLEGRO_ALIGN_CENTER, "Punti di %s: %d", player2->getName().c_str(), player2->getScore());
+				al_draw_textf(font, player1->getColor(), 300, 100, ALLEGRO_ALIGN_CENTER, "Punti di %s: %d", player1->getName().c_str(), player1->getScore());
+				al_draw_textf(font, player2->getColor(), 900, 100, ALLEGRO_ALIGN_CENTER, "Punti di %s: %d", player2->getName().c_str(), player2->getScore());
 				
 				//Movimenti
 				player1->movement();
@@ -203,6 +204,38 @@ int main() {
 				break;
 
 
+
+			case INITMULTIS:
+				player1 = new SpecialPlayer(scr, WHITE, "Giocatore 1");
+				player2 = new SpecialPlayer(scr, WHITE, "Giocatore 2");
+				ball = new Pallina(scr, WHITE);
+				scene = SPECIALMULTI;
+				al_rest(0.5);
+				break;
+
+			case SPECIALMULTI:
+				al_draw_textf(font, player1->getColor(), 300, 100, ALLEGRO_ALIGN_CENTER, "Punti di %s: %d", player1->getName().c_str(), player1->getScore());
+				al_draw_textf(font,player1->getColor(),300,130,ALLEGRO_ALIGN_CENTER,"PowerUp attuale : %s", ((SpecialPlayer*)player1)->getPowerupStr().c_str());
+				al_draw_textf(font, player2->getColor(), 900, 100, ALLEGRO_ALIGN_CENTER, "Punti di %s: %d", player2->getName().c_str(), player2->getScore());
+				al_draw_textf(font, player2->getColor(), 900, 130, ALLEGRO_ALIGN_CENTER, "PowerUp attuale : %s", ((SpecialPlayer*)player2)->getPowerupStr().c_str());
+
+				((SpecialPlayer*)player1)->movement();
+				((SpecialPlayer*)player2)->movement();
+				ball->movement(player1,player2);
+
+				action((SpecialPlayer*)player1, (SpecialPlayer*)player2, ball, &key);
+				action((SpecialPlayer*)player2, (SpecialPlayer*)player1, ball, &key);
+				
+				player1->render();
+				player2->render();
+				ball->render();
+
+				if (player1->getScore() >= WINSCORE || player2->getScore() >= WINSCORE) {
+					gameisover(&scene);
+					win = player1->getScore() > player2->getScore();
+				}
+
+				break;
 			}
 		}
 		else if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) 
@@ -258,6 +291,9 @@ ALLEGRO_COLOR colortype(Color color) {
 	case PURPLE:
 		colour = al_map_rgb(240, 75, 240);
 		break;
+	case INDIGO:
+		colour = al_map_rgb(6,2,112);
+		break;
 	case BLACK:
 		colour = al_map_rgb(0, 0, 0);
 		break;
@@ -272,23 +308,27 @@ ALLEGRO_COLOR colortype(Color color) {
 void gameisover(Scene *acScene){
 	if (*acScene == SINGLEPLAYER)
 		*acScene = GAMEOVERS;
-	else if (*acScene == MULTIPLAYER)
+	else if (*acScene == MULTIPLAYER || *acScene == SPECIALMULTI)
 		*acScene = GAMEOVERM;
 	else
 		std::cerr << "Niente gameover ";
 }
 
 void action(SpecialPlayer* p1, SpecialPlayer* p2, Pallina* pallina, ALLEGRO_KEYBOARD_STATE *key){
+	al_get_keyboard_state(key);
 	if (al_key_down(key, p1->getPkey())) {
 		switch (p1->getPowerup()) {
 		case FREEZE:
 			p2->freeze();
+			p1->powerUsed();
 			break;
 		case SPEEDUPBALL:
 			pallina->speedUp(2.5);
+			p1->powerUsed();
 			break;
 		case SUPERPOINT:
 			p1->superPoint();
+			p1->powerUsed();
 			break;
 		}
 	}

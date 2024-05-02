@@ -19,7 +19,7 @@
 #define LATO 40
 #define WINSCORE 5
 #define FPS 60.0
-#define FREEZETIME (FPS*5)
+#define FREEZETIME (FPS*10)
 
 //Enum che serve per capire in che scena del gioco ci troviamo attualmente
 enum Scene {
@@ -33,7 +33,10 @@ enum Scene {
 	INITMULTI, 
 	MULTIPLAYER,
 	GAMEOVERM,
-	DELMULTY,	
+	DELMULTY,
+
+	INITMULTIS,
+	SPECIALMULTI,
 };
 
 //Enum per semplificare la gestione dei colori
@@ -43,8 +46,12 @@ enum Color {
 	GREEN,
 	YELLOW,
 	PURPLE,
+	INDIGO,
 	BLACK,
-	WHITE
+	WHITE,
+	//Colori Speciali
+	GOLD,
+	
 };
 
 

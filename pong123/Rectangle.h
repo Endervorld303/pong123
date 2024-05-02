@@ -23,6 +23,7 @@ public:
 	float getx2();
 	float gety1();
 	float gety2();
+	ALLEGRO_COLOR getColor();
 	int getScore();
 
 	virtual void gotaPoint();//Per far ottenerte pla player un punto
@@ -43,6 +44,7 @@ public:
 	Player(Punti *scr, Color c, std::string name);//Costruttore
 	~Player();//Distruttore
 	virtual void movement() override;//Over ride del metodo astratta
+
 	std::string getName();//Getter del nome
 	void resetAll();//Resetta tutto
 };
@@ -63,6 +65,8 @@ public:
 	~SpecialPlayer();
 	int getPkey();
 	powerUp getPowerup();
+	std::string getPowerupStr();
+	void powerUsed();
 	void movement() override;//Override di movement
 	void loseHealth();//Perdi vita
 	void freeze();//Freezza il personaggio per 3 secondi
