@@ -78,4 +78,22 @@ public:
 
 
 //Classe Npc (WIP)
-class Npc : public Rectangle {};
+class Npc : public Rectangle {
+private:
+	powerUp power;//Potere usabile 
+	bool condMov;
+	int movConter;
+	bool doublePoint;
+	bool condy;
+public:
+	Npc(Punti* scr, Color c);
+	~Npc();
+	powerUp getPowerup();
+	std::string getPowerupStr();
+	void powerUsed();
+	void movement() override;//Override di movement
+	void freeze();//Freezza il personaggio per 3 secondi
+	void superPoint();//Cava il doppio della vita
+	void gotaPoint() override;//Ottieni un punto, override perché riscrive il gotapoint di Player
+
+};

@@ -33,15 +33,15 @@ int main() {
 	ALLEGRO_KEYBOARD_STATE key;
 
 	//Inizializzazione dei puntatori agli oggetti del gioco
-	Player* player1 = nullptr;//Player1
-	Player* player2 = nullptr;//Player2
+	Rectangle* player1 = nullptr;//Player1
+	Rectangle* player2 = nullptr;//Player2
 	Pallina* ball = nullptr;//Palla del gioco
 	SelecTriangle* t = new SelecTriangle(RED);//Triangolo del Menu
 
 	//Aggiungo i punti dove il triangolo può spostarsi e le azioni correlate al punto
 	t->addpoint(150,315,INITSINGLE);//Singleplayer base
 	t->addpoint(750,315, INITMULTI);//Multiplayerbase
-	t->addpoint(100,465, INITSINGLE);//Singpeayer wip
+	t->addpoint(100,465, INITSINGLES);//Singpeayer wip
 	t->addpoint(680,465, INITMULTIS);//Multiplayer Speciale
 
 	//Altre variabili per la logica del gioco
@@ -93,7 +93,7 @@ int main() {
 			case SINGLEPLAYER:
 				//Siamo nella scena singleplayer e quindi crea la scena del singleplayer, con la scritta col punteggio
 				//E poi fa muovere il player e la pallina e poi li renderizza
-				al_draw_textf(font, player1->getColor(), 600, 100, ALLEGRO_ALIGN_CENTER, "Punti di %s: %d", player1->getName().c_str(), player1->getScore());
+				al_draw_textf(font, player1->getColor(), 600, 100, ALLEGRO_ALIGN_CENTER, "Punti di %s: %d", ((Player*)player1)->getName().c_str(), player1->getScore());
 				
 				//Movimenti
 				player1->movement();
@@ -116,7 +116,7 @@ int main() {
 				al_draw_text(font, colortype(RED), 900, 450, ALLEGRO_ALIGN_CENTER, "Premi M per il Menu");
 				//Se viene premuto il tasto R il gioco si resetta e si torna al singleplayer
 				if (al_key_down(&key, ALLEGRO_KEY_R)) {
-					player1->resetAll();
+					((Player*)player1)->resetAll();
 					ball->reset();
 					scene = SINGLEPLAYER;
 				}
@@ -149,8 +149,8 @@ int main() {
 			case MULTIPLAYER:
 				//Siamo nella scena multiplayer quindi crea le scritte dei 2 player con i loro punteggi
 				//E fa muovere i player e la pallina e poi li renderizza
-				al_draw_textf(font, player1->getColor(), 300, 100, ALLEGRO_ALIGN_CENTER, "Punti di %s: %d", player1->getName().c_str(), player1->getScore());
-				al_draw_textf(font, player2->getColor(), 900, 100, ALLEGRO_ALIGN_CENTER, "Punti di %s: %d", player2->getName().c_str(), player2->getScore());
+				al_draw_textf(font, player1->getColor(), 300, 100, ALLEGRO_ALIGN_CENTER, "Punti di %s: %d", ((Player*)player1)->getName().c_str(), player1->getScore());
+				al_draw_textf(font, player2->getColor(), 900, 100, ALLEGRO_ALIGN_CENTER, "Punti di %s: %d", ((Player*)player2)->getName().c_str(), player2->getScore());
 				
 				//Movimenti
 				player1->movement();
@@ -173,16 +173,16 @@ int main() {
 			case GAMEOVERM:
 				//Siamo nel gameover del multiplayer 
 				if (win)//Se vince il primo player o il secondo player 
-					al_draw_textf(font, colortype(RED), 600, 300, ALLEGRO_ALIGN_CENTER, "Ha vinto %s", player1->getName().c_str());
+					al_draw_textf(font, colortype(RED), 600, 300, ALLEGRO_ALIGN_CENTER, "Ha vinto %s", ((Player*)player1)->getName().c_str());
 				else 
-					al_draw_textf(font, colortype(RED), 600, 300, ALLEGRO_ALIGN_CENTER, "Ha vinto ", player2->getName().c_str());
+					al_draw_textf(font, colortype(RED), 600, 300, ALLEGRO_ALIGN_CENTER, "Ha vinto ", ((Player*)player2)->getName().c_str());
 				al_draw_text(font, colortype(RED), 300, 450, ALLEGRO_ALIGN_CENTER, "Premi R per ricominciare");
 				al_draw_text(font, colortype(RED), 900, 450, ALLEGRO_ALIGN_CENTER, "Premi M per il Menu");
 				
 				//Se viene premuto il tasto R il multiplayer si resetta
 				if (al_key_down(&key, ALLEGRO_KEY_R)) {
-					player1->resetAll();
-					player2->resetAll();
+					((Player*)player1)->resetAll();
+					((Player*)player2)->resetAll();
 					ball->reset();
 					scene = MULTIPLAYER;
 				}
@@ -214,9 +214,9 @@ int main() {
 				break;
 
 			case SPECIALMULTI:
-				al_draw_textf(font, player1->getColor(), 300, 100, ALLEGRO_ALIGN_CENTER, "Punti di %s: %d", player1->getName().c_str(), player1->getScore());
+				al_draw_textf(font, player1->getColor(), 300, 100, ALLEGRO_ALIGN_CENTER, "Punti di %s: %d", ((Player*)player1)->getName().c_str(), player1->getScore());
 				al_draw_textf(font,player1->getColor(),300,130,ALLEGRO_ALIGN_CENTER,"PowerUp attuale : %s", ((SpecialPlayer*)player1)->getPowerupStr().c_str());
-				al_draw_textf(font, player2->getColor(), 900, 100, ALLEGRO_ALIGN_CENTER, "Punti di %s: %d", player2->getName().c_str(), player2->getScore());
+				al_draw_textf(font, player2->getColor(), 900, 100, ALLEGRO_ALIGN_CENTER, "Punti di %s: %d", ((Player*)player2)->getName().c_str(), player2->getScore());
 				al_draw_textf(font, player2->getColor(), 900, 130, ALLEGRO_ALIGN_CENTER, "PowerUp attuale : %s", ((SpecialPlayer*)player2)->getPowerupStr().c_str());
 
 				((SpecialPlayer*)player1)->movement();
@@ -235,6 +235,11 @@ int main() {
 					win = player1->getScore() > player2->getScore();
 				}
 
+				break;
+
+			case INITSINGLES:
+				player1 = new Player(scr, RED,"EMU OTORI");
+				player2 = new Npc(scr,BLUE);
 				break;
 			}
 		}

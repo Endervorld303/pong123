@@ -37,6 +37,10 @@ enum Scene {
 
 	INITMULTIS,
 	SPECIALMULTI,
+
+	INITSINGLES,
+	SPECIALSINGLE,
+	DELSINGLES,
 };
 
 //Enum per semplificare la gestione dei colori

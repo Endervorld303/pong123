@@ -218,3 +218,56 @@ void SpecialPlayer::gotaPoint(){
 		score++;
 	}
 }
+
+Npc::Npc(Punti* scr, Color c) : Rectangle::Rectangle(scr,c){
+	power = PNULL;
+	condy = rand() % 2;
+	condMov = true;
+	doublePoint = false;
+	movConter = 0;
+}
+
+Npc::~Npc(){
+	scr = NULL;
+}
+
+void Npc::movement(){
+	if (condMov) {
+		if (condy) {
+			if (y1 < scr[0].y) {
+				y1 -= MOVEMENTRECT;
+				y2 -= MOVEMENTRECT;
+			}
+			else {
+				condy = false;
+			}
+		}
+		else {
+			if (y2 > scr[1].y) {
+				y1 += MOVEMENTRECT;
+				y2 += MOVEMENTRECT;
+			}
+			else {
+				condy = true;
+			}
+		}
+	}
+	else {
+		if (movConter > FREEZETIME) {
+			condMov = true;
+			movConter = 0;
+		}
+
+		else
+			movConter++;
+	}
+}
+
+void Npc::gotaPoint(){
+	if (doublePoint)
+		score += 2;
+	else {
+		doublePoint = false;
+		score++;
+	}
+}
