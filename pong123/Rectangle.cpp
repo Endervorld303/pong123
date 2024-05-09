@@ -130,7 +130,7 @@ void Player::resetAll(){
 
 
 
-SpecialPlayer::SpecialPlayer(Punti* scr, Color c, std::string name) : Player(scr,c,name){
+SpecialPlayer::SpecialPlayer(Punti* scr, Color c, std::string name) : Player(scr,c,name), Special(){
 	healt = 3;//Vite disponibili
 	power = FREEZE;//Nullo perché non si ha nessun power up
 	condMov = true;
@@ -176,12 +176,12 @@ void SpecialPlayer::loseHealth(){
 
 
 void SpecialPlayer::gotaPoint(){
-	if (doublePoint)
+	if (doublePoint) {
 		score += 2;
-	else {
 		doublePoint = false;
-		score++;
 	}
+	else 
+		score++;
 }
 
 Npc::Npc(Punti* scr, Color c) : Rectangle::Rectangle(scr,c){
@@ -229,10 +229,11 @@ void Npc::movement(){
 }
 
 void Npc::gotaPoint(){
-	if (doublePoint)
+	if (doublePoint) {
 		score += 2;
-	else {
 		doublePoint = false;
+	}
+	else {
 		score++;
 	}
 }
@@ -243,6 +244,15 @@ void Npc::gotaPoint(){
 
 
 
+
+Special::Special(){
+	power = PNULL;
+	condMov = true;
+	movConter = 0;
+	doublePoint = false;
+}
+
+Special::~Special(){}
 
 powerUp Special::getPowerup() {
 	return power;
