@@ -199,18 +199,18 @@ Npc::~Npc(){
 void Npc::movement(){
 	if (condMov) {
 		if (condy) {
-			if (y1 < scr[0].y) {
-				y1 -= MOVEMENTRECT;
-				y2 -= MOVEMENTRECT;
+			if (y1 < scr[1].y) {
+				y1 += MOVEMENTRECT;
+				y2 += MOVEMENTRECT;
 			}
 			else {
 				condy = false;
 			}
 		}
 		else {
-			if (y2 > scr[1].y) {
-				y1 += MOVEMENTRECT;
-				y2 += MOVEMENTRECT;
+			if (y2 > scr[0].y) {
+				y1 -= MOVEMENTRECT;
+				y2 -= MOVEMENTRECT;
 			}
 			else {
 				condy = true;

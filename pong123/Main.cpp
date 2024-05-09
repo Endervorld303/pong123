@@ -237,10 +237,26 @@ int main() {
 
 				break;
 
+
+
+
 			case INITSINGLES:
 				player1 = new Player(scr, RED,"EMU OTORI");
 				player2 = new Npc(scr,BLUE);
+				ball = new Pallina(scr,INDIGO);
+				scene = SPECIALSINGLE;
+				al_rest(0.5);
 				break;
+
+			case SPECIALSINGLE:
+				al_draw_textf(font, player1->getColor(), 600, 100, ALLEGRO_ALIGN_CENTER, "Punti di %s: %d", ((Player*)player1)->getName().c_str(), player1->getScore());
+				al_draw_textf(font, player1->getColor(), 600, 130, ALLEGRO_ALIGN_CENTER, "PowerUp attuale : %s", ((SpecialPlayer*)player1)->getPowerupStr().c_str());
+				player1->movement();
+				player2->movement();
+				ball->movement(player1,player2);
+				player1->render();
+				player2->render();
+				ball->render();
 			}
 		}
 		else if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) 
