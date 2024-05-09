@@ -155,33 +155,6 @@ int SpecialPlayer::getPkey(){
 	return keyPower;
 }
 
-powerUp SpecialPlayer::getPowerup(){
-	return power;
-}
-
-std::string SpecialPlayer::getPowerupStr()
-{
-	std::string powerStr;
-	switch (power) {
-	case PNULL:
-		powerStr = "Nessuno";
-		break;
-	case FREEZE:
-		powerStr = "Freeze";
-		break;
-	case SPEEDUPBALL:
-		powerStr = "SpeedUp";
-		break;
-	case SUPERPOINT:
-		powerStr = "SuperPoint";
-		break;
-	}
-	return powerStr;
-}
-
-void SpecialPlayer::powerUsed(){
-	power = PNULL;
-}
 
 void SpecialPlayer::movement(){
 	if (condMov)
@@ -201,14 +174,6 @@ void SpecialPlayer::loseHealth(){
 	healt--;
 }
 
-void SpecialPlayer::freeze(){
-	condMov = false;
-	movConter = 0;
-}
-
-void SpecialPlayer::superPoint(){
-	doublePoint = true;
-}
 
 void SpecialPlayer::gotaPoint(){
 	if (doublePoint)
@@ -270,4 +235,49 @@ void Npc::gotaPoint(){
 		doublePoint = false;
 		score++;
 	}
+}
+
+
+
+
+
+
+
+
+powerUp Special::getPowerup() {
+	return power;
+}
+
+std::string Special::getPowerupStr()
+{
+	std::string powerStr;
+	switch (power) {
+	case PNULL:
+		powerStr = "Nessuno";
+		break;
+	case FREEZE:
+		powerStr = "Freeze";
+		break;
+	case SPEEDUPBALL:
+		powerStr = "SpeedUp";
+		break;
+	case SUPERPOINT:
+		powerStr = "SuperPoint";
+		break;
+	}
+	return powerStr;
+}
+
+void Special::powerUsed() {
+	power = PNULL;
+}
+
+
+void Special::freeze() {
+	condMov = false;
+	movConter = 0;
+}
+
+void Special::superPoint() {
+	doublePoint = true;
 }

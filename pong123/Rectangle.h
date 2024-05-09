@@ -52,25 +52,16 @@ public:
 
 
 //Classe di player speciale per la modalita speciale del singleplayer e multiplayer
-class SpecialPlayer : public Player {
+class SpecialPlayer : public Player, public Special {
 private:
 	int healt;//Vita
-	powerUp power;//Potere usabile 
 	int keyPower;
-	bool condMov;
-	int movConter;
-	bool doublePoint;
 public:
 	SpecialPlayer(Punti* scr, Color c, std::string name);
 	~SpecialPlayer();
 	int getPkey();
-	powerUp getPowerup();
-	std::string getPowerupStr();
-	void powerUsed();
 	void movement() override;//Override di movement
 	void loseHealth();//Perdi vita
-	void freeze();//Freezza il personaggio per 3 secondi
-	void superPoint();//I punti valgono il doppio
 	void gotaPoint() override;//Ottieni un punto, override perché riscrive il gotapoint di Player
 	
 };
@@ -78,22 +69,27 @@ public:
 
 
 //Classe Npc (WIP)
-class Npc : public Rectangle {
+class Npc : public Rectangle, public Special {
 private:
-	powerUp power;//Potere usabile 
-	bool condMov;
-	int movConter;
-	bool doublePoint;
 	bool condy;
 public:
 	Npc(Punti* scr, Color c);
 	~Npc();
+	void movement() override;//Override di movement
+	void gotaPoint() override;//Ottieni un punto, override perché riscrive il gotapoint di Player
+};
+
+class Special {
+protected:
+	powerUp power;//Potere usabile 
+	bool condMov;
+	int movConter;
+	bool doublePoint;
+
+public:
 	powerUp getPowerup();
 	std::string getPowerupStr();
 	void powerUsed();
-	void movement() override;//Override di movement
 	void freeze();//Freezza il personaggio per 3 secondi
 	void superPoint();//Cava il doppio della vita
-	void gotaPoint() override;//Ottieni un punto, override perché riscrive il gotapoint di Player
-
 };
