@@ -3,7 +3,8 @@
 int Rectangle::playerNum = 0;
 
 Rectangle::Rectangle(Punti *punti, Color c) {
-	playerNum++;
+	playerNum += 1;
+	std::cout << "PlayerNUm" << playerNum;
 	actualIstance = playerNum;
 	scr = punti;
 	switch(playerNum){
@@ -21,8 +22,8 @@ Rectangle::Rectangle(Punti *punti, Color c) {
 		y2 = scr[1].y / 2 - RECTLENGHT;
 		break;
 
-	case 3:
-		std::cerr << "Troppi player nel gioco";
+	default:
+		std::cout << "Troppi player nel gioco";
 		exit(-1);
 		break;
 	}
@@ -33,7 +34,7 @@ Rectangle::Rectangle(Punti *punti, Color c) {
 
 Rectangle::~Rectangle(){
 	scr = nullptr;
-	playerNum--;
+	playerNum -= 1;
 }
 
 
@@ -115,9 +116,7 @@ void Player::movement(){
 }
 
 
-Player::~Player(){
-	Rectangle::~Rectangle();
-}
+Player::~Player(){}
 
 std::string Player::getName(){
 	return name;
@@ -147,9 +146,7 @@ SpecialPlayer::SpecialPlayer(Punti* scr, Color c, std::string name) : Player(scr
 	}
 }
 
-SpecialPlayer::~SpecialPlayer(){
-	Player::~Player();
-}
+SpecialPlayer::~SpecialPlayer(){}
 
 int SpecialPlayer::getPkey(){
 	return keyPower;
@@ -170,6 +167,11 @@ void SpecialPlayer::movement(){
 	}
 }
 
+void SpecialPlayer::resetAll(){
+	Player::resetAll();
+	healt = 3;
+}
+
 void SpecialPlayer::loseHealth(){
 	healt--;
 }
@@ -184,24 +186,26 @@ void SpecialPlayer::gotaPoint(){
 		score++;
 }
 
+int SpecialPlayer::getVita(){
+	return healt;
+}
+
 Npc::Npc(Punti* scr, Color c) : Rectangle::Rectangle(scr,c){
 	power = PNULL;
-	condy = rand() % 2;
+	condy = rand()%2;
 	condMov = true;
 	doublePoint = false;
 	movConter = 0;
 }
 
-Npc::~Npc(){
-	scr = NULL;
-}
+Npc::~Npc(){}
 
 void Npc::movement(){
 	if (condMov) {
 		if (condy) {
 			if (y1 < scr[1].y) {
-				y1 += MOVEMENTRECT;
-				y2 += MOVEMENTRECT;
+				y1 += MOVEMENTRECT*1.5;
+				y2 += MOVEMENTRECT*1.5;
 			}
 			else {
 				condy = false;
@@ -209,8 +213,8 @@ void Npc::movement(){
 		}
 		else {
 			if (y2 > scr[0].y) {
-				y1 -= MOVEMENTRECT;
-				y2 -= MOVEMENTRECT;
+				y1 -= MOVEMENTRECT*1.5;
+				y2 -= MOVEMENTRECT*1.5;
 			}
 			else {
 				condy = true;

@@ -162,3 +162,8 @@ float Pallina::getRay() {
 	return ray;
 }
 
+bool Pallina::getCondy()
+{
+	return condy;
+}
+

@@ -33,7 +33,7 @@ int main() {
 	ALLEGRO_KEYBOARD_STATE key;
 
 	//Inizializzazione dei puntatori agli oggetti del gioco
-	Rectangle* player1 = nullptr;//Player1
+	Player* player1 = nullptr;//Player1
 	Rectangle* player2 = nullptr;//Player2
 	Pallina* ball = nullptr;//Palla del gioco
 	SelecTriangle* t = new SelecTriangle(RED);//Triangolo del Menu
@@ -236,12 +236,12 @@ int main() {
 				}
 
 				break;
-
+				
 
 
 
 			case INITSINGLES:
-				player1 = new Player(scr, RED,"EMU OTORI");
+				player1 = new SpecialPlayer(scr, RED,"EMU OTORI");
 				player2 = new Npc(scr,BLUE);
 				ball = new Pallina(scr,INDIGO);
 				scene = SPECIALSINGLE;
@@ -249,7 +249,8 @@ int main() {
 				break;
 
 			case SPECIALSINGLE:
-				al_draw_textf(font, player1->getColor(), 600, 100, ALLEGRO_ALIGN_CENTER, "Punti di %s: %d", ((Player*)player1)->getName().c_str(), player1->getScore());
+				al_draw_textf(font, player1->getColor(), 400, 100, ALLEGRO_ALIGN_CENTER, "Punti di %s: %d", ((Player*)player1)->getName().c_str(), player1->getScore());
+				al_draw_textf(font, player1->getColor(), 800, 100, ALLEGRO_ALIGN_CENTER, "Vite rimaste %d", ((SpecialPlayer*)player1)->getVita());
 				al_draw_textf(font, player1->getColor(), 600, 130, ALLEGRO_ALIGN_CENTER, "PowerUp attuale : %s", ((SpecialPlayer*)player1)->getPowerupStr().c_str());
 				player1->movement();
 				player2->movement();
@@ -257,6 +258,47 @@ int main() {
 				player1->render();
 				player2->render();
 				ball->render();
+				action((SpecialPlayer*)player1, (SpecialPlayer*)player2, ball, &key);
+
+				if ((ball->getX() - ball->getRay()) < scr[0].x) {
+					((SpecialPlayer*)player1)->loseHealth();
+					std::cout << ((SpecialPlayer*)player1)->getVita();
+					ball->reset();
+					player1->reset();
+					player2->reset();
+					al_rest(0.5);
+				}
+					
+				if (((SpecialPlayer*)player1)->getVita() < 1)
+					gameisover(&scene);
+				break;
+
+			case GAMEOVERSP:
+				//Siamo nel gameover del Singleplayer Speciale
+				al_draw_textf(font, colortype(RED), 600, 300, ALLEGRO_ALIGN_CENTER, "Hai perso con punteggio %d", ((SpecialPlayer*)player1)->getScore());
+				al_draw_text(font, colortype(RED), 300, 450, ALLEGRO_ALIGN_CENTER, "Premi R per ricominciare");
+				al_draw_text(font, colortype(RED), 900, 450, ALLEGRO_ALIGN_CENTER, "Premi M per il Menu");
+				//Se viene premuto il tasto R il gioco si resetta e si torna al gioco
+				if (al_key_down(&key, ALLEGRO_KEY_R)) {
+					((Player*)player1)->resetAll();
+					player2->reset();
+					ball->reset();
+					scene = SPECIALSINGLE;
+				}
+				//Se viene premuto il tasto M allora si tornera al Menu, non prima di aver distrutto gli oggetti del singleplayer 
+				else if (al_key_down(&key, ALLEGRO_KEY_M))
+					scene = DELSINGLES;
+				break;
+			case DELSINGLES:
+				delete player1;
+				player1 = nullptr;
+				delete player2;
+				player2 = nullptr;
+				delete ball;
+				ball = nullptr;
+				scene = MENU;
+				break;
+				
 			}
 		}
 		else if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) 
@@ -331,8 +373,8 @@ void gameisover(Scene *acScene){
 		*acScene = GAMEOVERS;
 	else if (*acScene == MULTIPLAYER || *acScene == SPECIALMULTI)
 		*acScene = GAMEOVERM;
-	else
-		std::cerr << "Niente gameover ";
+	else if (*acScene == SPECIALSINGLE)
+		*acScene = GAMEOVERSP;
 }
 
 void action(SpecialPlayer* p1, SpecialPlayer* p2, Pallina* pallina, ALLEGRO_KEYBOARD_STATE *key){

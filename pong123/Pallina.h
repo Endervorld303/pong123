@@ -28,4 +28,5 @@ public:
 	float getX();
 	float getY();
 	float getRay();
+	bool getCondy();
 };

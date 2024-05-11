@@ -46,7 +46,7 @@ public:
 	virtual void movement() override;//Over ride del metodo astratta
 
 	std::string getName();//Getter del nome
-	void resetAll();//Resetta tutto
+	virtual void resetAll();//Resetta tutto
 };
 
 
@@ -80,8 +80,10 @@ public:
 	~SpecialPlayer();
 	int getPkey();
 	void movement() override;//Override di movement
+	void resetAll() override;
 	void loseHealth();//Perdi vita
 	void gotaPoint() override;//Ottieni un punto, override perché riscrive il gotapoint di Player
+	int getVita();
 	
 };
 

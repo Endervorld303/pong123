@@ -41,6 +41,7 @@ enum Scene {
 	INITSINGLES,
 	SPECIALSINGLE,
 	DELSINGLES,
+	GAMEOVERSP
 };
 
 //Enum per semplificare la gestione dei colori
