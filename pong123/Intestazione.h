@@ -11,9 +11,10 @@
 #include <ctime>
 #include <cstring>
 #include <vector>
+
 //Costanti/Direttive del processore
 #define MOVPALLINA 1
-#define MOVEMENTRECT 1
+#define MOVEMENTRECT 0.002
 #define RECTLENGHT 100
 #define RECTWIDTH 15
 #define LATO 40
@@ -23,6 +24,7 @@
 
 //Enum che serve per capire in che scena del gioco ci troviamo attualmente
 enum Scene {
+	SNULL = 0,
 	MENU,
 
 	INITSINGLE,
@@ -74,6 +76,7 @@ struct Punti {
 	float x;
 	float y;
 };
+
 
 
 

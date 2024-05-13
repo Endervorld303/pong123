@@ -5,11 +5,12 @@
 #include "Triangle.h"
 
 using std::vector;
-
 //Funzioni definibili solo nel main perché non definibili in Intestazione.h perché richiedono classi in Rectangle e Pallina
 void action(SpecialPlayer* p1, SpecialPlayer* p2, Pallina* pallina, ALLEGRO_KEYBOARD_STATE* key);
 
-
+void *threadPlayer(ALLEGRO_THREAD *thread,void *arg);
+void *threadSpecialPlayer(ALLEGRO_THREAD* thread, void* arg);
+void *threadNpc(ALLEGRO_THREAD* thread, void* arg);
 int main() {
 	//Inizializzazione di tutte le addon di allegro che servono per il programma
 	al_init();
@@ -37,6 +38,10 @@ int main() {
 	Rectangle* player2 = nullptr;//Player2
 	Pallina* ball = nullptr;//Palla del gioco
 	SelecTriangle* t = new SelecTriangle(RED);//Triangolo del Menu
+
+	//Thread vari
+	ALLEGRO_THREAD* threadP1 = nullptr;
+	ALLEGRO_THREAD* threadP2 = nullptr;
 
 	//Aggiungo i punti dove il triangolo può spostarsi e le azioni correlate al punto
 	t->addpoint(150,315,INITSINGLE);//Singleplayer base
@@ -86,7 +91,12 @@ int main() {
 				//Qui si istanziano tutti gli oggetti riguardanti il singleplayer e poi si cambia la scena nel gioco singleplayer
 				player1 = new Player(scr, INDIGO, "Ash Lynx");
 				ball = new Pallina(scr, WHITE);
+				{
+					argRec aa = { player1,&scene };
+					threadP1 = al_create_thread(threadPlayer, (void*)&aa);
+				}
 				scene = SINGLEPLAYER;
+				al_start_thread(threadP1);
 				break;
 
 
@@ -96,7 +106,7 @@ int main() {
 				al_draw_textf(font, player1->getColor(), 600, 100, ALLEGRO_ALIGN_CENTER, "Punti di %s: %d", ((Player*)player1)->getName().c_str(), player1->getScore());
 				
 				//Movimenti
-				player1->movement();
+				//player1->movement();
 				ball->movement(player1, &scene);
 				
 				//Render
@@ -104,12 +114,16 @@ int main() {
 				ball->render();
 
 				//Condizione per vedere se la pallina va fuori dallo schermo
-				if ((ball->getX() - ball->getRay()) < scr[0].x)
+				if ((ball->getX() - ball->getRay()) < scr[0].x) {
 					gameisover(&scene);
+					al_join_thread(threadP1, NULL);
+				}
 				break;
 
 
 			case GAMEOVERS:
+				al_destroy_thread(threadP1);
+				threadP1 = nullptr;
 				//Siamo nel gameover del Singleplayer
 				al_draw_text(font, colortype(RED), 600, 300, ALLEGRO_ALIGN_CENTER, "HAI PERSO");
 				al_draw_text(font, colortype(RED), 300, 450, ALLEGRO_ALIGN_CENTER, "Premi R per ricominciare");
@@ -119,6 +133,11 @@ int main() {
 					((Player*)player1)->resetAll();
 					ball->reset();
 					scene = SINGLEPLAYER;
+					{
+						argRec aa = { player1,&scene };
+						threadP1 = al_create_thread(threadPlayer, (void*)&aa);
+					}
+					al_start_thread(threadP1);
 				}
 				//Se viene premuto il tasto M allora si tornera al Menu, non prima di aver distrutto gli oggetti del singleplayer 
 				else if (al_key_down(&key, ALLEGRO_KEY_M))
@@ -144,6 +163,14 @@ int main() {
 				player2 = new Player(scr, WHITE, "Giocatore 2");
 				ball = new Pallina(scr, WHITE);
 				scene = MULTIPLAYER;
+				{
+					argRec aa = { player1,&scene };
+					threadP1 = al_create_thread(threadPlayer, (void*)&aa);
+					argRec aaa = { player2,&scene };
+					threadP2 = al_create_thread(threadPlayer, (void*)&aaa);
+				}
+				al_start_thread(threadP1);
+				al_start_thread(threadP2);
 				break;
 
 			case MULTIPLAYER:
@@ -153,8 +180,8 @@ int main() {
 				al_draw_textf(font, player2->getColor(), 900, 100, ALLEGRO_ALIGN_CENTER, "Punti di %s: %d", ((Player*)player2)->getName().c_str(), player2->getScore());
 				
 				//Movimenti
-				player1->movement();
-				player2->movement();
+				//player1->movement();
+				//player2->movement();
 				ball->movement(player1, player2);
 				
 				//Render
@@ -301,8 +328,15 @@ int main() {
 				
 			}
 		}
-		else if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) 
+		else if (ev.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
+			scene = SNULL;
 			running = false;
+			if (threadP1 != nullptr) {
+				al_join_thread(threadP1,NULL);
+				al_destroy_thread(threadP1);
+			}
+		}
+			
 
 
 		al_flip_display();
@@ -363,9 +397,9 @@ ALLEGRO_COLOR colortype(Color color) {
 	case WHITE:
 		colour = al_map_rgb(255, 255, 255);
 		break;
-
-		return colour;
 	}
+
+	return colour;
 }
 
 void gameisover(Scene *acScene){
@@ -396,3 +430,16 @@ void action(SpecialPlayer* p1, SpecialPlayer* p2, Pallina* pallina, ALLEGRO_KEYB
 		}
 	}
 }
+
+void* threadPlayer(ALLEGRO_THREAD* thread, void* arg)
+{
+	argRec* t = (argRec*)arg;
+	while (*(t->sc) == SINGLEPLAYER || *(t->sc) == MULTIPLAYER) {
+		t->rec->movement();
+	}
+	return nullptr;
+}
+
+
+
+

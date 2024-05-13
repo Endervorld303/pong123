@@ -99,3 +99,13 @@ public:
 	void movement() override;//Override di movement
 	void gotaPoint() override;//Ottieni un punto, override perché riscrive il gotapoint di Player
 };
+
+
+
+
+//Struct di campi da passare al thread
+struct argRec {
+	Rectangle* rec;
+	Scene* sc;
+};
+

@@ -30,3 +30,6 @@ public:
 	float getRay();
 	bool getCondy();
 };
+
+
+
