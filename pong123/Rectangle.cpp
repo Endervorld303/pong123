@@ -4,7 +4,6 @@ int Rectangle::playerNum = 0;
 
 Rectangle::Rectangle(Punti *punti, Color c) {
 	playerNum += 1;
-	std::cout << "PlayerNUm" << playerNum;
 	actualIstance = playerNum;
 	scr = punti;
 	switch(playerNum){
@@ -226,7 +225,6 @@ void Npc::movement(){
 			condMov = true;
 			movConter = 0;
 		}
-
 		else
 			movConter++;
 	}

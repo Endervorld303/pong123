@@ -14,7 +14,7 @@
 
 //Costanti/Direttive del processore
 #define MOVPALLINA 1
-#define MOVEMENTRECT 0.002
+#define MOVEMENTRECT 1
 #define RECTLENGHT 100
 #define RECTWIDTH 15
 #define LATO 40
